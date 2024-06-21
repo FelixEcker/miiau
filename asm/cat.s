@@ -40,9 +40,7 @@ open:           pop rdi                 ; Pop next path from stack
 
                 push rax                ; Save file descriptor to the stack
 
-read:           pop rdi                   ; Get fd into rdi
-                push rdi                  ; Get fd back onto the stack
-
+read:           mov rdi, [rsp]            ; Get fd into rdi
                 mov rsi, read_buffer      ; Read READ_BUFFER_SIZE bytes
                 mov rdx, READ_BUFFER_SIZE
                 mov rax, SYSCALL_READ
