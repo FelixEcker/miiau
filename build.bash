@@ -6,27 +6,12 @@ MCU_VERSION="0.0"
 ASM="nasm"
 LD="ld"
 
-ASMFLAGS="-felf64"
+ASMFLAGS="-felf64 -Iinc/"
 LDFLAGS=""
 
+ASMDIR="asm/"
 OBJDIR="obj/"
 BINDIR="bin/"
-
-function build_objs() {
-  COMPILED_OBJECTS=()
-
-  for i in $1
-  do
-    OUTNAME="$OBJDIR$i.o"
-    INNAME="$SRCDIR$i.c"
-
-    echo "  CC $INNAME"
-
-    $CC $CFLAGS -c -o $OUTNAME $INNAME || exit
-
-    COMPILED_OBJECTS+=("${OUTNAME}")
-  done
-}
 
 function build() {
         PROGRAMS=("argtest cat")
@@ -34,7 +19,7 @@ function build() {
         echo "==> Building MCU"
         for i in $PROGRAMS
         do
-                INNAME="$i.s"
+                INNAME="$ASMDIR$i.s"
                 OBJNAME="$OBJDIR$i.o"
                 BINNAME="$BINDIR$i"
 
