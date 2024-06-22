@@ -1,3 +1,5 @@
+%include "strlen.inc"
+
 section .data
 EPERM: db "EPERM, Operation not permitted", 0
 ENOENT: db "ENOENT, No such file or directory", 0
@@ -131,47 +133,67 @@ EOWNERDEAD: db "EOWNERDEAD, Owner died", 0
 ENOTRECOVERABLE: db "ENOTRECOVERABLE, State not recoverable", 0
 
 PNTRS:
-                dq    EPERM, ENOENT, ESRCH, EINTR, EIO, ENXIO, E2BIG, ENOEXEC, EBADF, ECHILD, EAGAIN
-		dq    ENOMEM, EACCES, EFAULT, ENOTBLK, EBUSY, EEXIST, EXDEV, ENODEV, ENOTDIR, EISDIR
-		dq    EINVAL,ENFILE, EMFILE, ENOTTY, ETXTBSY, EFBIG, ENOSPC, ESPIPE, EROFS, EMLINK
-		dq    EPIPE, EDOM, ERANGE, EDEADLK, ENAMETOOLONG, ENOSYS, ENOTEMPTY, ELOOP, EWOULDBLOCK
-		dq    ENOMSG, EIDRM, ECHRNG, EL2NSYNC, EL3HLT, EL3RST, ELNRNG, EUNATCH, ENOCSI, EL2HLT
-		dq    EBADE, EBADR, EXFULL, ENOANO, EBADRQC, EBADSLT, EDEADLK, EBFONT, ENOSTR, ENODATA
-		dq    ETIME, ENOSR, ENONET, ENOPKG, EREMOTE, ENOLINK, EADV, ESRMNT, ECOMM , EPROTO
-		dq    EMULTIHOP, EDOTDOT, EBADMSG, EOVERFLOW, ENOTUNIQ, EBADFD, EREMCHG, ELIBACC, ELIBBAD
-		dq    ELIBSCN, ELIBMAX, ELIBEXEC, EILSEQ, ERESTART, ESTRPIPE, EUSERS, ENOTSOCK
-		dq    EDESTADDRREQ, EMSGSIZE, EPROTOTYPE, ENOPROTOOPT, EPROTONOSUPPORT, ESOCKTNOSUPPORT
-		dq    EOPNOTSUPP, EPFNOSUPPORT, EAFNOSUPPORT, EADDRINUSE, EADDRNOTAVAIL, ENETDOWN
-		dq    ENETUNREACH, ENETRESET, ECONNABORTED, ECONNRESET, ENOBUFS, EISCONN, ENOTCONN
-		dq    ESHUTDOWN, ETOOMANYREFS, ETIMEDOUT, ECONNREFUSED, EHOSTDOWN, EHOSTUNREACH, EALREADY
-		dq    EINPROGRESS, ESTALE, EUCLEAN, ENOTNAM, ENAVAIL, EISNAM, EREMOTEIO, EDQUOT
-		dq    ENOMEDIUM, EMEDIUMTYPE, ECANCELED, ENOKEY, EKEYEXPIRED, EKEYREVOKED, EKEYREJECTED
-		dq    EOWNERDEAD, ENOTRECOVERABLE
+                dq EPERM          , ENOENT         , ESRCH        , EINTR
+                dq EIO            , ENXIO          , E2BIG        , ENOEXEC
+                dq EBADF          , ECHILD         , EAGAIN       , ENOMEM
+                dq EACCES         , EFAULT         , ENOTBLK      , EBUSY
+                dq EEXIST         , EXDEV          , ENODEV       , ENOTDIR
+                dq EISDIR         , EINVAL         , ENFILE       , EMFILE
+                dq ENOTTY         , ETXTBSY        , EFBIG        , ENOSPC
+                dq ESPIPE         , EROFS          , EMLINK       , EPIPE
+                dq EDOM           , ERANGE         , EDEADLK      , ENAMETOOLONG
+                dq ENOSYS         , ENOTEMPTY      , ELOOP        , EWOULDBLOCK
+                dq ENOMSG         , EIDRM          , ECHRNG       , EL2NSYNC
+                dq EL3HLT         , EL3RST         , ELNRNG       , EUNATCH
+                dq ENOCSI         , EL2HLT         , EBADE        , EBADR
+                dq EXFULL         , ENOANO         , EBADRQC      , EBADSLT
+                dq EDEADLK        , EBFONT         , ENOSTR       , ENODATA
+                dq ETIME          , ENOSR          , ENONET       , ENOPKG
+                dq EREMOTE        , ENOLINK        , EADV         , ESRMNT
+                dq ECOMM          , EPROTO         , EMULTIHOP    , EDOTDOT
+                dq EBADMSG        , EOVERFLOW      , ENOTUNIQ     , EBADFD
+                dq EREMCHG        , ELIBACC        , ELIBBAD      , ELIBSCN
+                dq ELIBMAX        , ELIBEXEC       , EILSEQ       , ERESTART
+                dq ESTRPIPE       , EUSERS         , ENOTSOCK     , EDESTADDRREQ
+                dq EMSGSIZE       , EPROTOTYPE     , ENOPROTOOPT
+                dq EPROTONOSUPPORT, ESOCKTNOSUPPORT, EOPNOTSUPP   , EPFNOSUPPORT
+                dq EAFNOSUPPORT   , EADDRINUSE     , EADDRNOTAVAIL, ENETDOWN
+                dq ENETUNREACH    , ENETRESET      , ECONNABORTED , ECONNRESET
+                dq ENOBUFS        , EISCONN        , ENOTCONN     , ESHUTDOWN
+                dq ETOOMANYREFS   , ETIMEDOUT      , ECONNREFUSED , EHOSTDOWN
+                dq EHOSTUNREACH   , EALREADY       , EINPROGRESS  , ESTALE
+                dq EUCLEAN        , ENOTNAM        , ENAVAIL      , EISNAM
+                dq EREMOTEIO      , EDQUOT         , ENOMEDIUM    , EMEDIUMTYPE
+                dq ECANCELED      , ENOKEY         , EKEYEXPIRED  , EKEYREVOKED
+                dq EKEYREJECTED   , EOWNERDEAD     , ENOTRECOVERABLE
 
-section .text
-strlen:         xor rax, rax
-_strlen_loop:   cmp [rdi + rax], byte 0
-                jz _strlen_exit
-                inc rax
-                jmp _strlen_loop
-_strlen_exit:   ret
+; Prints the errno in RAX to STDERR
+errno_print:    push rax                    ; Save old register states
+                push rdi
+                push rsi
+                push rdx
 
-errno_print:    dec rax
-                mov rdi, [PNTRS + rax * 8]
-                call strlen
-                mov rsi, rdi
-                mov rdx, rax
-                
-                mov rdi, FD_STDERR
+                dec rax                     ; Decrement rax to use for lookup
+                mov rdi, [PNTRS + rax * 8]  ; Look errno up in table
+                call strlen                 ; Get string length of message
+
+                mov rsi, rdi                ; Set message as source for write
+                mov rdx, rax                ; Set buffer length
+                mov rdi, FD_STDERR 
                 mov rax, SYSCALL_WRITE
                 syscall
 
-                push 0x0a
-                mov rsi, rsp
-                mov rdx, 1
+                push 0x0a                   ; Get linefeed onto stack
+                mov rsi, rsp                ; Set stack pointer as write buffer
+                mov rdx, 1                  ; Write one byte from stack
                 mov rax, SYSCALL_WRITE
                 syscall
 
+                add rsp, 8                  ; discard linefeed from stack
+
+                pop rdx                     ; Restore old Register state
+                pop rsi
+                pop rdi
                 pop rax
 
                 ret

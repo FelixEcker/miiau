@@ -9,10 +9,9 @@ BITS 64
 
 %include "syscalls.inc"
 %include "stdio_defs.inc"
+%include "errno.inc"
 
 %define READ_BUFFER_SIZE 1024
-
-%include "asm/errno.asm"
 
 section .bss
 read_buffer: resb READ_BUFFER_SIZE
