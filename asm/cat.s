@@ -12,6 +12,8 @@ BITS 64
 
 %define READ_BUFFER_SIZE 1024
 
+%include "asm/errno.asm"
+
 section .bss
 read_buffer: resb READ_BUFFER_SIZE
 
@@ -69,8 +71,10 @@ _read_done:     pop rax       ; Discard old fd
                 mov rdi, 0    ; Ensure normal exit
                 jmp exit      ; Exit
 
-error:          sub rax, 0    ; Convert error to errno format
-                mov rdi, rax
+error:          neg rax
+                call errno_print
+                mov rdi, 0
+                mov rsi, 0
 
 exit:           mov rax, SYSCALL_EXIT
                 syscall
