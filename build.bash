@@ -19,7 +19,7 @@ function build() {
         echo "==> Building MCU"
         for i in $PROGRAMS
         do
-                INNAME="$ASMDIR$i.s"
+                INNAME="$ASMDIR$i.asm"
                 OBJNAME="$OBJDIR$i.o"
                 BINNAME="$BINDIR$i"
 
