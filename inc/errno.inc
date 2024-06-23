@@ -1,4 +1,12 @@
+; errno.inc -- Helpers for errno codes                                        ;
+;-----------------------------------------------------------------------------;
+; Copyright (c) 2024, Marie Eckert                                            ;
+; Licensed under the ISC License                                              ;
+;-----------------------------------------------------------------------------;
+
 %include "strlen.inc"
+
+; errno messages
 
 section .data
 EPERM: db "EPERM, Operation not permitted", 0
@@ -132,7 +140,8 @@ EKEYREJECTED: db "EKEYREJECTED, Key was rejected by service", 0
 EOWNERDEAD: db "EOWNERDEAD, Owner died", 0
 ENOTRECOVERABLE: db "ENOTRECOVERABLE, State not recoverable", 0
 
-PNTRS:
+; errno to message lookup table
+msg_ptrs:
                 dq EPERM          , ENOENT         , ESRCH        , EINTR
                 dq EIO            , ENXIO          , E2BIG        , ENOEXEC
                 dq EBADF          , ECHILD         , EAGAIN       , ENOMEM
@@ -167,15 +176,16 @@ PNTRS:
                 dq ECANCELED      , ENOKEY         , EKEYEXPIRED  , EKEYREVOKED
                 dq EKEYREJECTED   , EOWNERDEAD     , ENOTRECOVERABLE
 
+section .text
 ; Prints the errno in RAX to STDERR
 errno_print:    push rax                    ; Save old register states
                 push rdi
                 push rsi
                 push rdx
 
-                dec rax                     ; Decrement rax to use for lookup
-                mov rdi, [PNTRS + rax * 8]  ; Look errno up in table
-                call strlen                 ; Get string length of message
+                dec rax                        ; Decrement rax to use for lookup
+                mov rdi, [msg_ptrs + rax * 8]  ; Look errno up in table
+                call strlen                    ; Get string length of message
 
                 mov rsi, rdi                ; Set message as source for write
                 mov rdx, rax                ; Set buffer length

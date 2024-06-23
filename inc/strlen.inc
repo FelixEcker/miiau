@@ -1,6 +1,12 @@
+; strlen.inc -- Get Length of NULL-Terminated String                          ;
+; String Addr. in RDI                                                         ;
+; Return in RAX, Length in Bytes (excluding NULL-Terminator                   ;
+;-----------------------------------------------------------------------------;
+; Copyright (c) 2024, Marie Eckert                                            ;
+; Licensed under the ISC License                                              ;
+;-----------------------------------------------------------------------------;
+
 section .text
-; Counts the length of the NULL-Terminated string in bytes, clear RAX.
-; The Address of the string is expected to be located in RDI
 strlen:         xor rax, rax
 _strlen_loop:   cmp [rdi + rax], byte 0
                 jz _strlen_exit

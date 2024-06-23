@@ -7,7 +7,7 @@ ASM="nasm"
 LD="ld"
 
 ASMFLAGS="-felf64 -Iinc/"
-LDFLAGS=""
+LDFLAGS="-s"
 
 ASMDIR="asm/"
 OBJDIR="obj/"
