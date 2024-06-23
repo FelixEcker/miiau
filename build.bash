@@ -7,14 +7,14 @@ ASM="nasm"
 LD="ld"
 
 ASMFLAGS="-felf64 -Iinc/"
-LDFLAGS="-s"
+LDFLAGS=""
 
 ASMDIR="asm/"
 OBJDIR="obj/"
 BINDIR="bin/"
 
 function build() {
-        PROGRAMS=("argtest cat")
+        PROGRAMS=("argtest cat hexdump")
 
         echo "==> Building MCU"
         for i in $PROGRAMS

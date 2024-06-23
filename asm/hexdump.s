@@ -1,9 +1,6 @@
-; cat -- concatenate files and print to stdout                                 ;
-; Usage: cat <FILE(s)>                                                         ;
-;------------------------------------------------------------------------------;
-; Copyright (c) 2024, Marie Eckert                                             ;
-; Licensed under the ISC License                                               ;
-;------------------------------------------------------------------------------;
+; 00000000: 0000 0000 0000 0000 0000 0000 00000 00000 | ................
+; 00000010: 0000 0000 0000 0000 0000 0000 00000 00000 | ................
+; 00000020: 0000                                      | ..
 
 BITS 64
 
@@ -11,10 +8,12 @@ BITS 64
 %include "stdio_defs.inc"
 %include "errno.inc"
 
-%define READ_BUFFER_SIZE 1024
+%define READ_BUFFER_SIZE 16
+%define OUT_BUFFER_SIZE 256
 
 section .bss
 read_buffer:	resb READ_BUFFER_SIZE
+out_buffer:	resb OUT_BUFFER_SIZE
 
 section .text
 global _start
@@ -50,6 +49,8 @@ read:           mov rdi, [rsp]            ; Get fd into rdi
                 cmp rax, 0            ; Errcheck
                 jl error
                 je _read_done         ; EOF reached
+
+format:		
 
                 mov rdi, FD_STDOUT    ; Write readbuffer to stdout
                 mov rsi, read_buffer
