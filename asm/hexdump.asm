@@ -2,21 +2,21 @@
 ; 00000010: 0000 0000 0000 0000 0000 0000 00000 00000 | ................
 ; 00000020: 0000                                      | ..
 
-BITS 64
+format ELF64 executable 3
 
-%include "syscalls.inc"
-%include "stdio_defs.inc"
-%include "errno.inc"
+include "inc/syscalls.inc"
+include "inc/stdio_defs.inc"
+include "inc/errno.inc"
 
-%define READ_BUFFER_SIZE 16
-%define OUT_BUFFER_SIZE 256
+READ_BUFFER_SIZE = 16
+OUT_BUFFER_SIZE = 256
 
-section .bss
-read_buffer:	resb READ_BUFFER_SIZE
-out_buffer:	resb OUT_BUFFER_SIZE
+segment readable writeable
+read_buffer	rb READ_BUFFER_SIZE
+out_buffer      rb OUT_BUFFER_SIZE
 
-section .text
-global _start
+segment readable executable
+entry _start
 _start:         pop rax
                 pop rdi                 ; discard program path
                 dec rax
@@ -49,8 +49,6 @@ read:           mov rdi, [rsp]            ; Get fd into rdi
                 cmp rax, 0            ; Errcheck
                 jl error
                 je _read_done         ; EOF reached
-
-format:		
 
                 mov rdi, FD_STDOUT    ; Write readbuffer to stdout
                 mov rsi, read_buffer

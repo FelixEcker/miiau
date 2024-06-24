@@ -6,7 +6,7 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
-section .text
+segment readable executable
 strlen:         xor rax, rax
 _strlen_loop:   cmp [rdi + rax], byte 0
                 jz _strlen_exit

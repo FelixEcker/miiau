@@ -4,11 +4,11 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
-%include "strlen.inc"
+include "inc/strlen.inc"
 
 ; errno messages
 
-section .data
+segment readable
 EPERM: db "EPERM, Operation not permitted", 0
 ENOENT: db "ENOENT, No such file or directory", 0
 ESRCH: db "ESRCH, No such process", 0
@@ -176,7 +176,7 @@ msg_ptrs:
                 dq ECANCELED      , ENOKEY         , EKEYEXPIRED  , EKEYREVOKED
                 dq EKEYREJECTED   , EOWNERDEAD     , ENOTRECOVERABLE
 
-section .text
+segment readable executable
 ; Prints the errno in RAX to STDERR
 errno_print:    push rax                    ; Save old register states
                 push rdi

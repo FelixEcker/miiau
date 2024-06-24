@@ -5,19 +5,20 @@
 ; Licensed under the ISC License                                               ;
 ;------------------------------------------------------------------------------;
 
-BITS 64
+format ELF64 executable 3
 
-%include "syscalls.inc"
-%include "stdio_defs.inc"
-%include "errno.inc"
 
-%define READ_BUFFER_SIZE 1024
+include "inc/syscalls.inc"
+include "inc/stdio_defs.inc"
+include "inc/errno.inc"
 
-section .bss
-read_buffer:	resb READ_BUFFER_SIZE
+READ_BUFFER_SIZE = 1024
 
-section .text
-global _start
+segment readable writeable
+read_buffer	rb READ_BUFFER_SIZE
+
+segment readable executable
+entry _start
 _start:         pop rax
                 pop rdi                 ; discard program path
                 dec rax

@@ -6,7 +6,7 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
-section .text
+segment readable executable
 strcmp:         push rsi
                 push rdi
 

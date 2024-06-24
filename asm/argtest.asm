@@ -5,19 +5,20 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
-BITS 64
+format ELF64 executable 3
 
-%include "strcmp.inc"
+segment readable executable
 
-global _start
+include "inc/strcmp.inc"
 
+entry _start
 _start:         pop rax            ; get argc
                 pop rdi            ; discard program path
 
                 dec rax            ; subtract program path from rax
 
                 mov rdi, 1
-                cmp rax, byte 2    ; exit if args < 2 (excluding path)
+                cmp rax, 2         ; exit if args < 2 (excluding path)
                 jl exit
 
                 pop rsi            ; search arg
@@ -27,7 +28,7 @@ check_loop:     pop rdi            ; next arg
                 call strcmp
                 mov rdi, rax       ; Copy return value to RDI
 
-                cmp rdi, byte 0    ; exit with code 0 on match
+                cmp rdi, 0         ; exit with code 0 on match
                 je exit
 
                 dec rax            ; continue loop if arguments left (rax>0)

@@ -1,21 +1,21 @@
 ; Standard File Descriptors
-%define FD_STDIN 0
-%define FD_STDOUT 1
-%define FD_STDERR 2
+FD_STDIN = 0
+FD_STDOUT = 1
+FD_STDERR = 2
 
 ; Opening Modes
-%define O_ACCMODE 0003
-%define O_RDONLY 00
-%define O_WRONLY 01
-%define O_RDWR 02
-%define O_CREAT 0100	; Not fcntl.
-%define O_EXCL 0200	; Not fcntl.
-%define O_NOCTTY 0400	; Not fcntl.
-%define O_TRUNC	01000	; Not fcntl.
-%define O_APPEND 02000
-%define O_NONBLOCK 04000
-%define O_NDELAY O_NONBLOCK
-%define O_SYNC 04010000
-%define O_FSYNC	O_SYNC
-%define O_ASYNC	020000
-%define __O_LARGEFILE 0100000
+O_ACCMODE = 0003
+O_RDONLY = 00
+O_WRONLY = 01
+O_RDWR = 02
+O_CREAT = 0100 ; Not = fcntl.
+O_EXCL = 0200 ; Not = fcntl.
+O_NOCTTY = 0400 ; Not = fcntl.
+O_TRUNC = 01000 ; Not = fcntl.
+O_APPEND = 02000
+O_NONBLOCK = 04000
+O_NDELAY = O_NONBLOCK
+O_SYNC = 04010000
+O_FSYNC = O_SYNC
+O_ASYNC = 020000
+__O_LARGEFILE = 0100000

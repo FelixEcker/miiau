@@ -3,10 +3,10 @@
 
 MCU_VERSION="0.0"
 
-ASM="nasm"
+ASM="fasm"
 LD="ld"
 
-ASMFLAGS="-felf64 -Iinc/"
+ASMFLAGS=""
 LDFLAGS="-s"
 
 ASMDIR="asm/"
@@ -20,14 +20,14 @@ function build() {
         for i in $PROGRAMS
         do
                 INNAME="$ASMDIR$i.asm"
-                OBJNAME="$OBJDIR$i.o"
+                OUTNAME="$ASMDIR$i"
                 BINNAME="$BINDIR$i"
 
-                printf "\tASM $ASMFLAGS $INNAME -o $OBJNAME\n"
-                $ASM $ASMFLAGS $INNAME -o $OBJNAME || exit 1
-                
-                printf "\tLD  $LDFLAGS $OBJNAME -o $BINNAME\n"
-                $LD $LDFLAGS $OBJNAME -o $BINNAME || exit 2
+                printf "  FASM $ASMFLAGS $INNAME\n"
+                fasm $ASMFLAGS $INNAME || exit 1
+
+                printf "  MV $OUTNAME $BINNAME\n"
+                mv $OUTNAME $BINNAME
         done
         echo "==> Build finished!"
 }
