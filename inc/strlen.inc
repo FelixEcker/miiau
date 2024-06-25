@@ -6,6 +6,8 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
+irpv any, strlen_inc { rept 0 {} rept 1 { hexstr_inc equ
+
 segment readable executable
 strlen:         xor rax, rax
 _strlen_loop:   cmp [rdi + rax], byte 0
@@ -13,3 +15,5 @@ _strlen_loop:   cmp [rdi + rax], byte 0
                 inc rax
                 jmp _strlen_loop
 _strlen_exit:   ret
+
+} ; END INCLUDE GUARD

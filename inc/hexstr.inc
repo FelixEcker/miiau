@@ -5,6 +5,8 @@
 ; Licensed under the ISC License                                               ;
 ;------------------------------------------------------------------------------;
 
+irpv any, hexstr_inc { rept 0 {} rept 1 { hexstr_inc equ
+
 segment readable executable
 hexstr:         push rax                ; Save registers
                 push rsi
@@ -55,3 +57,5 @@ hexstr_ret:     pop r10                 ; Restore registers & return.
                 pop rsi
                 pop rax
                 ret
+
+} ; END INCLUDE GUARD

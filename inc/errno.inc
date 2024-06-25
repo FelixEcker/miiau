@@ -4,6 +4,8 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
+irpv any, errno_inc { rept 0 {} rept 1 { errno_inc equ
+
 include "inc/strlen.inc"
 
 ; errno messages
@@ -207,3 +209,5 @@ errno_print:    push rax                    ; Save old register states
                 pop rax
 
                 ret
+
+} ; END INCLUDE GUARD

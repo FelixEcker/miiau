@@ -6,6 +6,8 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
+irpv any, strcmp_inc { rept 0 {} rept 1 { strcmp_inc equ
+
 segment readable executable
 strcmp:         push rsi
                 push rdi
@@ -31,3 +33,5 @@ _strcmp_eq:     mov rax, 0
 _strcmp_ret:    pop rdi
                 pop rsi
                 ret
+
+} ; END INCLUDE GUARD
