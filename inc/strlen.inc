@@ -6,7 +6,7 @@
 ; Licensed under the ISC License                                              ;
 ;-----------------------------------------------------------------------------;
 
-irpv any, strlen_inc { rept 0 {} rept 1 { hexstr_inc equ
+irpv any, strlen_inc { rept 0 {} rept 1 { strlen_inc equ
 
 segment readable executable
 strlen:         xor rax, rax
