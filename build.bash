@@ -10,7 +10,6 @@ ASMFLAGS=""
 LDFLAGS="-s"
 
 ASMDIR="asm/"
-OBJDIR="obj/"
 BINDIR="bin/"
 
 function build() {
@@ -35,10 +34,6 @@ function build() {
 }
 
 function setup() {
-        if [ ! -d "$OBJDIR" ]; then
-          mkdir $OBJDIR
-        fi
-
         if [ ! -d "$BINDIR" ]; then
                 mkdir $BINDIR
         fi
