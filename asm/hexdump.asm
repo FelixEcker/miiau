@@ -20,7 +20,7 @@ entry _start
 _start:         mov rdi, read_buffer
                 mov rsi, READ_BUFFER_SIZE
                 mov rdx, out_buffer
-                call hex_str
+                call hexstr
 
                 mov rdi, FD_STDOUT
                 mov rsi, out_buffer
