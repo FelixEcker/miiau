@@ -28,6 +28,8 @@ function build() {
 
                 printf "  MV $OUTNAME $BINNAME\n"
                 mv $OUTNAME $BINNAME
+
+                chmod +x $BINNAME
         done
         echo "==> Build finished!"
 }
