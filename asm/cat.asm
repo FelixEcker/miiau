@@ -1,5 +1,5 @@
 ; cat -- concatenate files and print to stdout                                 ;
-; Usage: cat <FILE(s)>                                                         ;
+; Usage: cat [file...]                                                         ;
 ;------------------------------------------------------------------------------;
 ; Copyright (c) 2024, Marie Eckert                                             ;
 ; Licensed under the ISC License                                               ;
