@@ -12,6 +12,9 @@ include "inc/hexstr.inc"
 include "inc/syscalls.inc"
 include "inc/stdio_defs.inc"
 
+; Uncomment to support displaying extended ASCII codes
+; define EXTENDED_ASCII 1
+
 ; errors on rax <0
 macro syscall_errcheck {
   cmp rax, 0
@@ -19,12 +22,12 @@ macro syscall_errcheck {
 }
 
 READ_BUFFER_SIZE = 16
-OUT_BUFFER_SIZE = 71
+OUT_BUFFER_SIZE  = 71
 
-OUT_BUFFER_ADDR_START = 0
-OUT_BUFFER_ADDR_COLON = 8
-OUT_BUFFER_DATA_START = 10
-OUT_BUFFER_PIPE_START = 52
+OUT_BUFFER_ADDR_START  = 0
+OUT_BUFFER_ADDR_COLON  = 8
+OUT_BUFFER_DATA_START  = 10
+OUT_BUFFER_PIPE_START  = 52
 OUT_BUFFER_ASCII_START = 54
 OUT_BUFFER_LINEFEED    = 70
 
@@ -151,16 +154,22 @@ make_outbuf_data_loop:
                 mov rdi, read_buffer
                 mov rdx, out_buffer + OUT_BUFFER_ASCII_START
 make_outbuf_ascii_loop:
-                mov sil, [rdi]
-                cmp sil, 0x20
-                jl make_outbuf_non_ascii
+                mov sil, [rdi]                  ; Get next byte
+                cmp sil, 0x20                   ; Check if non-printable
+                jl make_outbuf_non_printable
 
+if defined EXTENDED_ASCII
+                cmp sil, 0x7F                   ; Check if DEL
+                je make_outbuf_non_printable
+else
                 cmp sil, 0x7E
-                jg make_outbuf_non_ascii
+                jg make_outbuf_non_printable
+end if
 
+                ; Either normal ascii or extended ascii
                 jmp make_outbuf_ascii_loop_cont
 
-make_outbuf_non_ascii:
+make_outbuf_non_printable:
                 mov sil, '.'
 
 make_outbuf_ascii_loop_cont:
