@@ -6,7 +6,7 @@ MIIAU are utilities written in 100% memory unsafe and "blazingly fast" assembly 
 They consist of:
 - [X] argtest
 - [X] cat
-- [ ] hexdump
+- [X] hexdump
 
 ## Requirements
 * bash
