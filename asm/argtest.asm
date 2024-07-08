@@ -22,17 +22,20 @@ _start:         pop rax            ; get argc
                 jl exit
 
                 pop rsi            ; search arg
-                dec rax            ; subtract program path from rax
+                dec rax
 
 check_loop:     pop rdi            ; next arg
+                push rax           ; Save argc to stack
                 call strcmp
                 mov rdi, rax       ; Copy return value to RDI
 
-                cmp rdi, 0         ; exit with code 0 on match
+                cmp rax, 0         ; exit with code 0 on match
                 je exit
 
+                pop rax            ; Get argc back from stack
                 dec rax            ; continue loop if arguments left (rax>0)
-                jnz check_loop
+                cmp rax, 0
+                jg check_loop
 
                 mov rdi, 1         ; Ensure exit code is 1 on failure
 
