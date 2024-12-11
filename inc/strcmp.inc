@@ -15,20 +15,15 @@ strcmp:         push rsi
 _strcmp_next:   mov al, [rdi]
                 mov ah, [rsi]
 
-                cmp al, ah
-                jne _strcmp_ne
+                sub al, ah
+                jnz _strcmp_ret
 
                 cmp al, byte 0
-                je _strcmp_eq
-                
+                je _strcmp_ret
+
                 inc rsi
                 inc rdi
                 jmp _strcmp_next
-
-_strcmp_ne:     mov rax, 1
-                jmp _strcmp_ret
-
-_strcmp_eq:     mov rax, 0
 
 _strcmp_ret:    pop rdi
                 pop rsi
